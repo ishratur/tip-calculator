@@ -1,6 +1,7 @@
 import {useState} from 'react';
 import '../style.css'
 
+
 const Calculator = () => {
 
     const [total, setTotal] = useState(0)
@@ -18,7 +19,7 @@ const Calculator = () => {
                     type="number"
                     required
                     value={total}
-                    min={0}
+                    min={1}
                     onChange={(e) => setTotal(e.target.value)}
                 />       
             </label>
