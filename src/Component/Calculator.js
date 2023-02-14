@@ -1,46 +1,88 @@
 import {useState} from 'react';
-import '../style.css'
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import { round } from 'lodash';
 
 
-const Calculator = () => {
-
-    const [total, setTotal] = useState(0)
+export default function Test() {
+    const [total, setTotal] = useState(1)
     const [percentage, setPercentage] = useState(14)
 
 
     const calculateTip = () => {
-        return percentage/100 * total 
+        const tip = percentage/100 * total
+        return round(tip, 2)
     }
-    return ( 
-        <div className='container'>
-            <label>
-                Total:
-                <input 
-                    type="number"
-                    required
-                    value={total}
-                    min={1}
-                    onChange={(e) => setTotal(e.target.value)}
-                />       
-            </label>
-            <br />
 
-            <label>
-                Set Percentage: 
-                <input 
-                    type="number"
-                    required
-                    value={percentage}
-                    min={0}
-                    onChange={(e) => setPercentage(e.target.value)}
-                />       
-            </label>
-            <h2>Tender: {total - calculateTip()}</h2>
-            <h2>Tip: {calculateTip()}</h2>
-            
+    const preventMinus = (e) => {
+        if(e.code === 'Minus'){
+            e.preventDefault();
+        }
+    }
+  return (
+    <>     
+    <Box
+      component="form"
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="30vh"
+      sx={{
+        '& > :not(style)': { m: 1, width: '25ch' },
+      }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField 
+        label="Total"
+        type="Number"
+        value={total}
+        onKeyPress={preventMinus}
+        onChange={(e) => setTotal(e.target.value)}
+        InputProps={{
+            inputProps: { min: 1 }
+          }}
+        />
 
-        </div>
-     );
+      <TextField 
+        label="Tip(%)"
+        type="Number"
+        value={percentage}
+        onKeyPress={preventMinus}
+        onChange={(e) => setPercentage(e.target.value)}
+        /> 
+     
+    </Box>
+
+    <Box
+          component="form"
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+        //   minHeight="10vh"
+        sx={{
+            '& > :not(style)': { m: 1, width: '25ch' },
+          }}
+    >
+        <TextField
+        label="Tender Amount"
+        InputProps={{
+            readOnly: true,
+        }}
+        value={total - calculateTip()}
+        variant="filled"
+        />
+
+        <TextField
+        label="Tip Amount"
+        InputProps={{
+            readOnly: true,
+        }}
+        value={round(calculateTip(),2)}
+        variant="filled"
+        />  
+    </Box>
+    </>
+
+  );
 }
- 
-export default Calculator;
