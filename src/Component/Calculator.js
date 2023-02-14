@@ -2,16 +2,23 @@ import {useState} from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import { round } from 'lodash';
+import '../style.css'
 
 
-export default function Test() {
+export default function Calculator() {
     const [total, setTotal] = useState(1)
     const [percentage, setPercentage] = useState(14)
 
 
-    const calculateTip = () => {
+    const calculateTipAmount = () => {
         const tip = percentage/100 * total
         return round(tip, 2)
+    }
+
+    const calculateTenderAmount = () => {
+      const tender = total - calculateTipAmount()
+
+      return round(tender,2)
     }
 
     const preventMinus = (e) => {
@@ -20,13 +27,15 @@ export default function Test() {
         }
     }
   return (
-    <>     
+    <>
+    <h3>Calculate Tip</h3>     
     <Box
       component="form"
       display="flex"
       justifyContent="center"
       alignItems="center"
       minHeight="30vh"
+      
       sx={{
         '& > :not(style)': { m: 1, width: '25ch' },
       }}
@@ -50,6 +59,9 @@ export default function Test() {
         value={percentage}
         onKeyPress={preventMinus}
         onChange={(e) => setPercentage(e.target.value)}
+        InputProps={{
+          inputProps: { min: 1 }
+        }}
         /> 
      
     </Box>
@@ -69,7 +81,7 @@ export default function Test() {
         InputProps={{
             readOnly: true,
         }}
-        value={total - calculateTip()}
+        value={calculateTenderAmount()}
         variant="filled"
         />
 
@@ -78,7 +90,7 @@ export default function Test() {
         InputProps={{
             readOnly: true,
         }}
-        value={round(calculateTip(),2)}
+        value={calculateTipAmount()}
         variant="filled"
         />  
     </Box>
